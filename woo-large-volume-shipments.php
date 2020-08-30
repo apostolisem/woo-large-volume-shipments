@@ -3,7 +3,7 @@
 ** Plugin Name: WooCommerce Large Volume Shipments
 ** Plugin URI: https://wpcare.gr
 ** Description: Adds a "call for shipping costs" option when an order exceeds a certain weight limit. Useful for large volume orders where shipping costs are not calculated automatically.
-** Version: 2.0.1
+** Version: 2.0.2
 ** Author: WPCARE
 ** Author URI: https://wpcare.gr
 ** License: Gpl2 or later
@@ -20,8 +20,11 @@ function wplvs_init() {
 global $woocommerce;
 if ( ( is_checkout() || is_cart() ) && $woocommerce->cart->cart_contents_weight > (float)get_option( 'wplvs_shipping_weight' ) AND get_option( 'wplvs_shipping_enabled' ) == "yes" ) {
 
-	if (is_cart()) {
-		wc_print_notice( __( get_option( 'wplvs_shipping_message' ), 'woocommerce' ), 'success' );
+	add_action( 'woocommerce_before_cart', 'wplvs_add_cart_notice', 9 );
+	function wplvs_add_cart_notice() {
+		if (is_cart()) {
+			wc_print_notice( __( get_option( 'wplvs_shipping_message' ), 'woocommerce' ), 'success' );
+		}
 	}
 
 	add_action( 'woocommerce_before_checkout_form', 'wplvs_add_checkout_notice', 9 );
@@ -79,13 +82,13 @@ add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'p
 				'title'       => __( 'Title', 'woocommerce' ),
 				'type'        => 'text',
 				'description' => __( 'This controls the title which the user sees during checkout.', 'woocommerce' ),
-				'default'     => __( 'Call us for Shipping Cost', 'woocommerce' ),
+				'default'     => __( 'Call us for Shipping Costs', 'woocommerce' ),
 				'desc_tip'    => true,
 			),
 			'min_weight' => array(
 				'title'       => __( 'Minimum Weight', 'woocommerce' ),
 				'type'        => 'text',
-				'description' => __( 'The minimum weight that products are categorized as large volume products.', 'woocommerce' ),
+				'description' => __( 'The minimum order weight that order is categorized as large volume shipment.', 'woocommerce' ),
 				'default'     => __( '10.00', 'woocommerce' ),
 				'desc_tip'    => true,
 			),
@@ -93,7 +96,7 @@ add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'p
 				'title'       => __( 'Message to Customer', 'woocommerce' ),
 				'type'        => 'textarea',
 				'description' => __( 'The message that customer will see at checkout when he selects large volume products.', 'woocommerce' ),
-				'default'     => __( 'You added in card large volume products that can only be shipped with Metaforiki Shipping.', 'woocommerce' ),
+				'default'     => __( 'Your order weighs more than the allowable limit and shipping costs can not be calculated automatically, after placing the order call at (+31) 123456789 and we\'ll inform you about the shipping costs.', 'woocommerce' ),
 				'desc_tip'    => true,
 			),
 		);
