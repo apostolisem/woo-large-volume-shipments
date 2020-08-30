@@ -2,8 +2,8 @@
 /*
 ** Plugin Name: WooCommerce Large Volume Shipments
 ** Plugin URI: https://wpcare.gr
-** Description: A WooCommerce Plugin to enable shipping for large volume orders.
-** Version: 2.0.0
+** Description: Adds a "call for shipping costs" option when an order exceeds a certain weight limit. Useful for large volume orders where shipping costs are not calculated automatically.
+** Version: 2.0.1
 ** Author: WPCARE
 ** Author URI: https://wpcare.gr
 ** License: Gpl2 or later
